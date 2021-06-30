@@ -15,9 +15,13 @@ import java.util.stream.Collectors;
 class VideoLibrary {
 
   private final HashMap<String, Video> videos;
+  private final HashMap<String, VideoPlaylist> playlists;
 
   VideoLibrary() {
     this.videos = new HashMap<>();
+    this.playlists = new HashMap<>();
+
+    // import videos from videos.txt file
     try {
       File file = new File(this.getClass().getResource("/videos.txt").getFile());
 
@@ -42,6 +46,9 @@ class VideoLibrary {
     }
   }
 
+  /**
+   * Get a list of all videos.
+   */
   List<Video> getVideos() {
     return new ArrayList<>(this.videos.values());
   }
@@ -51,5 +58,34 @@ class VideoLibrary {
    */
   Video getVideo(String videoId) {
     return this.videos.get(videoId);
+  }
+
+  /**
+   * Get a list of all playlists.
+   */
+  List<VideoPlaylist> getPlaylists() {
+    return new ArrayList<>(this.playlists.values());
+  }
+
+  /**
+   * Get a playlist by name. Returns null if the playlist is not found.
+   */
+  VideoPlaylist getPlaylist(String name) {
+    return this.playlists.get(name);
+  }
+
+  /**
+   * Add a playlist.
+   */
+  void addPlaylist(String name) {
+    String playlistId = name.toLowerCase();
+    playlists.put(playlistId, new VideoPlaylist(name));
+  }
+
+  /**
+   * Delete a playlist.
+   */
+  void deletePlaylist(String name) {
+    playlists.remove(name);
   }
 }
