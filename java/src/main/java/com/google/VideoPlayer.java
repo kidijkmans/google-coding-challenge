@@ -333,8 +333,15 @@ public class VideoPlayer {
       System.out.println("Cannot flag video: Video is already flagged");
     } else {
       String reason = "Not supplied";
+
       videoRequested.setFlagged(true);
       videoRequested.setFlagReason(reason);
+
+      // if video being flagged is currently playing, stop the video
+      if (videoPlaying.getVideoId().equals(videoId)) {
+        stopVideo();
+      }
+
       System.out.println("Successfully flagged video: " + videoRequested.getTitle() + " (reason: " + reason + ")");
     }
   }
@@ -348,9 +355,15 @@ public class VideoPlayer {
       System.out.println("Cannot flag video: Video is already flagged");
     } else {
       reason = (reason.equals("") ? "Not supplied" : reason);
+
       videoRequested.setFlagged(true);
       videoRequested.setFlagReason(reason);
-      stopVideo();
+
+      // if video being flagged is currently playing, stop the video
+      if (videoPlaying.getVideoId().equals(videoId)) {
+        stopVideo();
+      }
+
       System.out.println("Successfully flagged video: " + videoRequested.getTitle() + " (reason: " + reason + ")");
     }
   }
