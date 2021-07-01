@@ -350,6 +350,7 @@ public class VideoPlayer {
       reason = (reason.equals("") ? "Not supplied" : reason);
       videoRequested.setFlagged(true);
       videoRequested.setFlagReason(reason);
+      stopVideo();
       System.out.println("Successfully flagged video: " + videoRequested.getTitle() + " (reason: " + reason + ")");
     }
   }
