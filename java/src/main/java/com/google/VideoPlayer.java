@@ -337,8 +337,8 @@ public class VideoPlayer {
       videoRequested.setFlagged(true);
       videoRequested.setFlagReason(reason);
 
-      // if video being flagged is currently playing, stop the video
-      if (videoPlaying.getVideoId().equals(videoId)) {
+      // if video being flagged is currently playing or paused, stop the video
+      if (videoPlaying.getVideoId().equals(videoId) || videoPaused.getVideoId().equals(videoId)) {
         stopVideo();
       }
 
@@ -359,8 +359,8 @@ public class VideoPlayer {
       videoRequested.setFlagged(true);
       videoRequested.setFlagReason(reason);
 
-      // if video being flagged is currently playing, stop the video
-      if (videoPlaying.getVideoId().equals(videoId)) {
+      // if video being flagged is currently playing or paused, stop the video
+      if (videoPlaying.getVideoId().equals(videoId) || videoPaused.getVideoId().equals(videoId)) {
         stopVideo();
       }
 
