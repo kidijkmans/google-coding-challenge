@@ -236,10 +236,19 @@ public class VideoPlayer {
     if (containsSpecialChar) {
       System.out.println("The search term cannot contain any whitespace or special characters");
     } else {
-      List<Video> searchResults = new ArrayList();
       List<Video> allVideos = videoLibrary.getVideos();
+      List<Video> nonFlaggedVideos = new ArrayList();
+      List<Video> searchResults = new ArrayList();
 
+      // generate a list of all videos that are not flagged
       for(Video v : allVideos) {
+        if (!v.getFlagged()) { // if video is not flagged
+          nonFlaggedVideos.add(v); // add video to list of non flagged videos
+        }
+      }
+
+      // generate a list of videos in search results from all non flagged videos
+      for(Video v : nonFlaggedVideos) {
         if (v.getTitle().toLowerCase().contains(searchTerm.toLowerCase())) { // if video contains search term
           searchResults.add(v); // add video to search results list
         }
@@ -281,10 +290,19 @@ public class VideoPlayer {
   }
 
   public void searchVideosWithTag(String videoTag) {
-    List<Video> searchResults = new ArrayList();
     List<Video> allVideos = videoLibrary.getVideos();
+    List<Video> nonFlaggedVideos = new ArrayList();
+    List<Video> searchResults = new ArrayList();
 
+    // generate a list of all videos that are not flagged
     for(Video v : allVideos) {
+      if (!v.getFlagged()) { // if video is not flagged
+        nonFlaggedVideos.add(v); // add video to list of non flagged videos
+      }
+    }
+
+    // generate a list of videos in search results from all non flagged videos
+    for(Video v : nonFlaggedVideos) {
       if (v.getTags().contains(videoTag.toLowerCase())) {
         searchResults.add(v); // add video to search results list
       }
@@ -338,8 +356,10 @@ public class VideoPlayer {
       videoRequested.setFlagReason(reason);
 
       // if video being flagged is currently playing or paused, stop the video
-      if (videoPlaying.getVideoId().equals(videoId) || videoPaused.getVideoId().equals(videoId)) {
+      if (videoPlaying != null && videoPlaying.getVideoId().equals(videoId)) {
         stopVideo();
+      } else if (videoPaused != null && videoPaused.getVideoId().equals(videoId)) {
+        videoPaused = null;
       }
 
       System.out.println("Successfully flagged video: " + videoRequested.getTitle() + " (reason: " + reason + ")");
@@ -360,8 +380,10 @@ public class VideoPlayer {
       videoRequested.setFlagReason(reason);
 
       // if video being flagged is currently playing or paused, stop the video
-      if (videoPlaying.getVideoId().equals(videoId) || videoPaused.getVideoId().equals(videoId)) {
+      if (videoPlaying != null && videoPlaying.getVideoId().equals(videoId)) {
         stopVideo();
+      } else if (videoPaused != null && videoPaused.getVideoId().equals(videoId)) {
+        videoPaused = null;
       }
 
       System.out.println("Successfully flagged video: " + videoRequested.getTitle() + " (reason: " + reason + ")");
