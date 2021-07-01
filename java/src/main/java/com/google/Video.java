@@ -9,6 +9,8 @@ class Video {
   private final String title;
   private final String videoId;
   private final List<String> tags;
+  private boolean flagged = false;
+  private String flagReason;
 
   Video(String title, String videoId, List<String> tags) {
     this.title = title;
@@ -31,6 +33,26 @@ class Video {
     return tags;
   }
 
+  /** Set the the video as flagged. */
+  void setFlagged(boolean flag) {
+    this.flagged = flag;
+  }
+
+  /** Set the reason for flagging the video. */
+  void setFlagReason(String flagReason) {
+    this.flagReason = flagReason;
+  }
+
+  /** Returns whether or not the video is flagged. */
+  boolean getFlagged() {
+    return flagged;
+  }
+
+  /** Returns the reason of why the video is flagged. */
+  String getFlagReason() {
+    return flagReason;
+  }
+
   @Override
   public String toString() {
     StringBuilder bld = new StringBuilder();
@@ -43,6 +65,8 @@ class Video {
     }
     String tagsString = bld.toString();
 
-    return title + " (" + videoId + ") " + "[" + tagsString + "]";
+    String flagString = (flagged ? " - FLAGGED (reason: " + flagReason + ")" : "");
+
+    return title + " (" + videoId + ") " + "[" + tagsString + "]" + flagString;
   }
 }

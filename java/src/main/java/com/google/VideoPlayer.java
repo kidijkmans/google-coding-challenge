@@ -31,6 +31,8 @@ public class VideoPlayer {
     Video videoRequested = videoLibrary.getVideo(videoId);
     if (videoRequested == null) { // check if requested video exists
       System.out.println("Cannot play video: Video does not exist");
+    } else if (videoRequested.getFlagged()) {
+      System.out.println("Cannot play video: Video is currently flagged (reason: " + videoRequested.getFlagReason() + ")");
     } else {
       if (videoPlaying != null) { // if a video is already playing
         stopVideo();
@@ -50,9 +52,28 @@ public class VideoPlayer {
     }
   }
 
+  private int getRandom(int range) {
+    Random r = new Random();
+    int low = 0;
+    int high = range;
+    int result = r.nextInt(high-low) + low;
+
+    return result;
+  }
+
   public void playRandomVideo() {
+    // generate a list of all videos that are not flagged
+    List<Video> allVideos = videoLibrary.getVideos();
+    List<Video> nonFlaggedVideos = new ArrayList();
+
+    for(Video v : allVideos) {
+      if (!v.getFlagged()) { // if video is not flagged
+        nonFlaggedVideos.add(v); // add video to list of non flagged videos
+      }
+    }
+
     // check if videos are available
-    if (videoLibrary.getVideos().size() <= 0) {
+    if (nonFlaggedVideos.size() <= 0) {
       System.out.println("No videos available");
     } else {
       if (videoPlaying != null) {
@@ -60,13 +81,9 @@ public class VideoPlayer {
       }
 
       // generate random number
-      Random r = new Random();
-      int low = 0;
-      int high = videoLibrary.getVideos().size();
-      int result = r.nextInt(high-low) + low;
-
+      int random = getRandom(nonFlaggedVideos.size());
       // get video id of the video with the index of the random number
-      String videoId = videoLibrary.getVideos().get(result).getVideoId();
+      String videoId = nonFlaggedVideos.get(random).getVideoId();
 
       playVideo(videoId);
     }
@@ -124,6 +141,8 @@ public class VideoPlayer {
       System.out.println("Cannot add video to " + playlistName + ": Playlist does not exist");
     } else if (videoRequested == null) { // if video doesn't exist
       System.out.println("Cannot add video to " + playlistName + ": Video does not exist");
+    } else if (videoRequested.getFlagged()) {
+      System.out.println("Cannot add video to " + playlistName + ": Video is currently flagged (reason: " + videoRequested.getFlagReason() + ")");
     } else if (playlistRequested.getVideos().contains(videoRequested)) {
       System.out.println("Cannot add video to " + playlistName + ": Video already added");
     } else {
@@ -306,14 +325,46 @@ public class VideoPlayer {
   }
 
   public void flagVideo(String videoId) {
-    System.out.println("flagVideo needs implementation");
+    Video videoRequested = videoLibrary.getVideo(videoId);
+
+    if (videoRequested == null) {
+      System.out.println("Cannot flag video: Video does not exist");
+    } else if (videoRequested.getFlagged()) {
+      System.out.println("Cannot flag video: Video is already flagged");
+    } else {
+      String reason = "Not supplied";
+      videoRequested.setFlagged(true);
+      videoRequested.setFlagReason(reason);
+      System.out.println("Successfully flagged video: " + videoRequested.getTitle() + " (reason: " + reason + ")");
+    }
   }
 
   public void flagVideo(String videoId, String reason) {
-    System.out.println("flagVideo needs implementation");
+    Video videoRequested = videoLibrary.getVideo(videoId);
+
+    if (videoRequested == null) {
+      System.out.println("Cannot flag video: Video does not exist");
+    } else if (videoRequested.getFlagged()) {
+      System.out.println("Cannot flag video: Video is already flagged");
+    } else {
+      reason = (reason.equals("") ? "Not supplied" : reason);
+      videoRequested.setFlagged(true);
+      videoRequested.setFlagReason(reason);
+      System.out.println("Successfully flagged video: " + videoRequested.getTitle() + " (reason: " + reason + ")");
+    }
   }
 
   public void allowVideo(String videoId) {
-    System.out.println("allowVideo needs implementation");
+    Video videoRequested = videoLibrary.getVideo(videoId);
+
+    if (videoRequested == null) {
+      System.out.println("Cannot remove flag from video: Video does not exist");
+    } else if (!videoRequested.getFlagged()) {
+      System.out.println("Cannot remove flag from video: Video is not flagged");
+    } else {
+      videoRequested.setFlagged(true);
+      videoRequested.setFlagReason("");
+      System.out.println("Successfully removed flag from video: " + videoRequested.getTitle());
+    }
   }
 }
