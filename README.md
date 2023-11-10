@@ -8,7 +8,7 @@ A command-line version of YouTube was created within 24 hours as part of a compr
 
 2. Download the code in a ZIP file or clone the repository
 
-``` $ git clone https://github.com/kidijkmans/google-coding-challenge.git ```
+``` $ git clone https://github.com/kimberly-0/google-coding-challenge.git ```
 
 3. Open `Run.java` (located in *java/src/main/java/com/google*) in an IDE
 
